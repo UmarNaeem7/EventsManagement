@@ -1,0 +1,98 @@
+﻿
+@{
+	Layout = null;
+}
+
+<!DOCTYPE html>
+
+<style>
+	.main {
+		max-width: 1300px;
+		margin: auto;
+	}
+
+	body {
+		background: #DAE2F8; /* fallback for old browsers */
+		background: -webkit-linear-gradient(to right, #D6A4A4, #DAE2F8); /* Chrome 10-25, Safari 5.1-6 */
+		background: linear-gradient(to right, #D6A4A4, #DAE2F8); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+	}
+
+	button {
+		float: right;
+		/* default for <button>, but useful for <a> */
+		display: inline;
+		text-align: center;
+		text-decoration: none;
+		/* create a small space when buttons wrap on 2 lines */
+		margin: 2px 0;
+		/* invisible border (will be colored on hover/focus) */
+		border: solid 1px #fff;
+		border-radius: 0px;
+		/* size comes from text & padding (no width/height) */
+		padding: 0.5em 3em;
+		/* make sure colors have enough contrast! */
+		color: white;
+		background-color: black;
+		transition: 0.6s ease;
+		cursor: pointer;
+	}
+
+		button:hover {
+			background-color: blue;
+			color: white;
+			
+		}
+	
+</style>
+
+<html>
+<head>
+	<meta name="viewport" content="width=device-width" />
+	<title>Index</title>
+</head>
+<body>
+	 <div class="main">
+		 <div>
+			@if (Session["email"] == null)
+			{
+		 	<form action="../Home/SignUp">
+		 		<button class="butt" style="margin:5px; margin-top: 30px;">Sign Up</button>
+		 	</form>
+			}
+
+		 	@if (Session["email"] == null)
+			{
+		 	<form action="../Home/Login">
+		 		<button class="butt" style="margin:5px; margin-top: 30px;">Sign In</button>
+		 	</form>
+		}
+		else
+		{
+
+		 <form action="../Home/UserLogout">
+		 	<button class="butt" style="margin:5px; margin-top: 30px;">Logout</button>
+		 </form>
+
+		 <form action="../Home/Profile">
+		 	<button class="butt" style="margin:5px; margin-top: 30px;">@Session["email"].ToString()</button>
+		 </form>
+
+
+	 }
+
+
+		 <form action="../Events">
+		 	<button class="butt" style="margin:5px; margin-top: 30px;">Events</button>
+		 </form>
+
+		 <form action="../Home/Index">
+		 	<button class="butt" style="margin:5px; margin-top: 30px;">Home</button>
+		 </form>
+		 </div>
+	</div>
+	<br />
+	<div style="margin:5px; margin-top: 200px; text-align: center; font-weight: bold">
+		Welcome to the Events Manager
+	</div>
+</body>
+</html>

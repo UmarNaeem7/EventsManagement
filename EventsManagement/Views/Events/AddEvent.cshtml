@@ -1,0 +1,62 @@
+﻿
+@{
+	Layout = null;
+}
+
+<!DOCTYPE html>
+
+<style type="text/css">
+	.butt {
+		float: right;
+		/* default for <button>, but useful for <a> */
+		display: inline;
+		text-align: center;
+		text-decoration: none;
+		/* create a small space when buttons wrap on 2 lines */
+		margin: 2px 0;
+		/* invisible border (will be colored on hover/focus) */
+		border: solid 1px #fff;
+		border-radius: 0px;
+		/* size comes from text & padding (no width/height) */
+		padding: 0.5em 3em;
+		/* make sure colors have enough contrast! */
+		color: white;
+		background-color: black;
+		transition: 0.6s ease;
+		position:absolute;
+		top:25%;
+		left:45%;
+	}
+
+	body {
+		background: #DAE2F8; /* fallback for old browsers */
+		background: -webkit-linear-gradient(to right, #D6A4A4, #DAE2F8); /* Chrome 10-25, Safari 5.1-6 */
+		background: linear-gradient(to right, #D6A4A4, #DAE2F8); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+	}
+</style>
+
+<html>
+<head>
+	<meta name="viewport" content="width=device-width" />
+	<title>AddEvent</title>
+</head>
+<body>
+	<div> 
+		@if (ViewBag.Message == "Event could not be added")
+		{
+			<div style="text-align:center; color:red; position:absolute; top:20%; left: 45%;">@ViewBag.Message</div>
+			<br /><br /><br />
+			<form action="../Events/Index">
+					<button class="butt">
+						Click here to go back
+					</button>
+			</form>
+			
+		}
+		else
+		{
+			Response.Redirect("~/Events/Index");
+		}
+	</div>
+</body>
+</html>

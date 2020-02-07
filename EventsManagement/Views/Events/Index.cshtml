@@ -1,0 +1,425 @@
+﻿@using EventsManagement.Models
+@using System.Data.SqlClient;
+@using System.Data.Sql;
+@using System.Data;
+@{
+	Layout = null;
+}
+
+@{ 
+	DataTable dt_UpcomingPublicEvents = CRUD.GetUpcomingPublicEventsList();
+	DataTable dt_PassedPublicEvents = CRUD.GetPassedPublicEventsList();
+	DataTable dt_UpcomingPrivateEvents = CRUD.GetUpcomingPrivateEventsList();
+	DataTable dt_PassedPrivateEvents = CRUD.GetPassedPrivateEventsList();
+}
+
+
+<style type="text/css">
+	.div3 {
+		position: absolute;
+		top: 22%;
+		font-weight: bold;
+	}
+
+	body {
+		background: #DAE2F8; /* fallback for old browsers */
+		background: -webkit-linear-gradient(to right, #D6A4A4, #DAE2F8); /* Chrome 10-25, Safari 5.1-6 */
+		background: linear-gradient(to right, #D6A4A4, #DAE2F8); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+	}
+
+	.myTable {
+		width: 100%;
+		text-align: left;
+		background-color: black;
+		border-collapse: collapse;
+		color: white;
+		position:absolute;
+		top: 25%;
+	}
+
+		.myTable th {
+			background-color: black;
+			color: white;
+		}
+
+		.myTable td,
+		.myTable th {
+			padding: 10px;
+			border: 1px solid #fff;
+		}
+
+	.main {
+		max-width: 1300px;
+		margin: auto;
+	}
+
+
+	.butt {
+		float: right;
+		/* default for <button>, but useful for <a> */
+		display: inline;
+		text-align: center;
+		text-decoration: none;
+		/* create a small space when buttons wrap on 2 lines */
+		margin: 2px 0;
+		/* invisible border (will be colored on hover/focus) */
+		border: solid 1px #fff;
+		border-radius: 0px;
+		/* size comes from text & padding (no width/height) */
+		padding: 0.5em 3em;
+		/* make sure colors have enough contrast! */
+		color: white;
+		background-color: black;
+		transition: 0.6s ease;
+		cursor:pointer;
+	}
+
+	#butt1 {
+		float: none;
+		/* default for <button>, but useful for <a> */
+		position:absolute;
+		left: 40px;
+		top: 15%;
+		display: inline;
+		text-align: center;
+		text-decoration: none;
+		/* create a small space when buttons wrap on 2 lines */
+		margin: 1px 0;
+		/* invisible border (will be colored on hover/focus) */
+		border: solid 0.5px #fff;
+		border-radius: 0px;
+		/* size comes from text & padding (no width/height) */
+		padding: 0.3em 0.8em;
+		/* make sure colors have enough contrast! */
+		color: white;
+		background-color: black;
+		transition: 0.6s ease;
+		cursor:pointer;
+	}
+
+	.butt:hover {
+		background-color: blue;
+		color: white;
+	}
+
+	#butt1:hover {
+		background-color: blue;
+		color: white;
+	}
+
+	div.hidden {
+		display: none
+	}
+
+	.f1{
+		position: absolute;
+		top: 27%;
+	}
+
+	#b1 {
+		position: absolute;
+		top: 80%;
+	}
+
+	#div2{
+		position:absolute;
+		top: 150%;
+		left:30%;
+	}
+
+	*{box-sizing: border-box;}
+
+	.open-button{
+		background-color:#555;
+		color:white;
+		padding: 16px 20px;
+		border:none;
+		cursor:pointer;
+		opacity:0.8;
+		position:fixed;
+		bottom:23px;
+		right:28px;
+		width:280px;
+	}
+
+	.form-popup{
+		display:none;
+		position:fixed;
+		bottom:0;
+		right:15px;
+		border:3px solid #f1f1f1;
+		z-index:9;
+	}
+
+	.form-container{
+		max-width:300px;
+		padding:10px;
+		background-color:white;
+	}
+
+	.form-container .btn{
+		background-color:#4CAF50;
+		color:white;
+		padding:16px 20px;
+		border:none;
+		cursor:pointer;
+		width:100%;
+		margin-bottom:10px;
+		opacity:0.8;
+	}
+
+	.form-container .cancel{
+		background-color:red;
+	}
+
+	.form-container .btn:hover, .open-button:hover{
+		opacity:1;
+	}
+
+	label{
+		text-align:center;
+		font-weight:bold;
+	}
+
+	input{
+		position:absolute;
+		left: 25%;
+	}
+</style>
+
+<script>
+	
+
+			function func2() {
+				var x = document.getElementById("div2");
+		
+				if (x.style.display === "none") {
+					x.style.display = "block";
+				} else {
+					x.style.display = "none";
+				}
+	}
+
+	var gTitle = null;
+	var gDate = null;
+
+	function fillform(id) {
+		var x = id;
+		if (x.indexOf("e") == 0) {
+			var index = x.substring(1);
+			
+		}
+		else {
+
+		}
+	}
+
+
+	$(document).ready(function () {
+		$("div#div2").removeClass("hidden");
+	});
+</script>
+
+<!DOCTYPE html>
+
+<html>
+<head>
+	@*<meta name="viewport" content="width=device-width" />*@
+	<title>Index</title>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css">
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js"></script>
+</head>
+<body>
+	<div class="main">
+		<div>
+			@if (Session["email"] == null)
+			{
+				<form action="../Home/SignUp">
+					<button class="butt" style="margin:5px; margin-top: 30px;">Sign Up</button>
+				</form>
+			}
+
+			@if (Session["email"] == null)
+			{
+				<form action="../Home/Login">
+					<button class="butt" style="margin:5px; margin-top: 30px;">Sign In</button>
+				</form>
+			}
+			else
+			{
+
+				<form action="../Home/UserLogout">
+					<button class="butt" style="margin:5px; margin-top: 30px;">Logout</button>
+				</form>
+
+				<form action="../Home/Profile">
+					<button class="butt" style="margin:5px; margin-top: 30px;">@Session["email"].ToString()</button>
+				</form>
+
+				
+			}
+
+
+			<form action="../Home/Index">
+				<button class="butt" style="margin:5px; margin-top: 30px;">Home</button>
+			</form>
+		</div>
+	</div>
+
+
+	@if (Session["email"] == null)
+	{
+		<button class="btn btn-info btn-lg" data-toggle="modal" data-target="#myModal" id="butt1" style="position:absolute;left:87.5%">
+			Add an Event
+		</button>
+	}
+	else
+	{
+		<button class="btn btn-info btn-lg" data-toggle="modal" data-target="#myModal" id="butt1" style="position:absolute;left:87.5%">
+			Add an Event
+		</button>
+	}
+
+	<div>
+		<br />
+		<br />
+		<br />
+		<br />
+
+		@if (Session["email"] == null)
+		{
+			<div style="position:absolute; top: 150px; width:100%">
+				<div style="font-weight:bold">Upcoming Events</div>
+				<br><br />
+				<br><br />
+				@Html.Raw(EventsManagement.Models.CRUD.ConvertDataTableToHTML(dt_UpcomingPublicEvents))
+			</div>
+			<div style="position:absolute; top: 350px; width:100%">
+				<div style="font-weight:bold">Passed Events</div>
+				<br><br />
+				<br><br />
+				@Html.Raw(EventsManagement.Models.CRUD.ConvertDataTableToHTML(dt_PassedPublicEvents))
+			</div>
+		}
+		else
+		{
+			<div style="position:absolute; top: 150px; width:100%">
+				<div style="font-weight:bold">Upcoming Events</div>
+				<br><br />
+				<br><br />
+				@Html.Raw(EventsManagement.Models.CRUD.ConvertDataTableToHTML(dt_UpcomingPrivateEvents))
+			</div>
+			<div style="position:absolute; top: 500px; width:100%">
+				<div style="font-weight:bold">Passed Events</div>
+				<br><br />
+				<br><br />
+				@Html.Raw(EventsManagement.Models.CRUD.ConvertDataTableToHTML(dt_PassedPrivateEvents))
+			</div>
+		}
+		<br />
+	</div>
+
+	@if (Session["email"] != null)
+	{
+		<div class="modal fade" id="myModal" role="dialog">
+			<div class="modal-dialog">
+
+				<div class="modal-content">
+					<div class="modal-header">
+						<button type="button" class="close" data-dismiss="modal">&times;</button>
+						<h4 class="modal-title" style="font-weight:bold; text-align:center">Create a new event</h4>
+					</div>
+					<div class="modal-body">
+
+						<form method="post" action="../Events/AddEvent" class="form-container">
+
+							<div>
+								<label for="title"><b>Title</b></label>
+								<input type="text" name="title" required />
+								<br /><br />
+							</div>
+							<div>
+								<label for="date"><b>Date</b></label>
+								<input type="date" name="date" required />
+								<br /><br />
+							</div>
+							<div>
+								<label for="time"><b>Time</b></label>
+								<input type="time" name="time" />
+								<br /><br />
+							</div>
+							<div>
+								<label for="duartion"><b>Duration</b></label>
+								<input type="text" name="duration" />
+								<br /><br />
+							</div>
+							<div>
+								<label for="description"><b>Description</b></label>
+								<input type="text" name="description" />
+								<br /><br />
+							</div>
+							<div>
+								<label for="location"><b>Location</b></label>
+								<input type="text" name="location" />
+								<br /><br />
+							</div>
+							<div>
+
+								<label for="isPublic"><b>Is Public</b></label>
+								<input type="checkbox" name="isPublic" />
+								<br /><br />
+							</div>
+							<div>
+								<label for="upcoming"><b>Upcoming</b></label>
+								<input type="radio" name="upcoming" value="1" checked /> <br />
+								<label for="upcoming"><b>Passed</b></label>
+								<input type="radio" name="upcoming" /> <br />
+								<br /><br />
+							</div>
+
+							<br />
+							<button class="btn" style="position:absolute;top:80%; left:20%;padding: 0.3em 0.8em;width:30%">Create</button>
+							<button type="button" class="btn btn-default" data-dismiss="modal"
+									style="position:absolute;top:80%; left:50%;padding: 0.3em 0.8em;width:30%">Cancel</button>
+							<br /><br />
+						</form>
+
+					</div>
+				</div>
+
+			</div>
+		</div>
+
+
+
+	}
+	else
+	{
+		<div class="modal fade" id="myModal" role="dialog">
+			<div class="modal-dialog">
+
+				<div class="modal-content">
+					<div class="modal-header">
+						<button type="button" class="close" data-dismiss="modal">&times;</button>
+						<h4 class="modal-title" style="font-weight:bold; text-align:center">Create a new event</h4>
+					</div>
+					<div class="modal-body">
+						<div style="text-align:center;font-weight:bold;">Please log in first to create a new event</div>
+						<br />
+						<div style="text-align:center;font-weight:bold;">
+							<button type="button" class="btn btn-default" data-dismiss="modal">Ok</button>
+						</div>
+						
+					</div>
+				</div>
+
+			</div>
+		</div>
+
+
+	}
+</body>
+</html>

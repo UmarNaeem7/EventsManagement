@@ -1,0 +1,413 @@
+﻿@using EventsManagement.Models
+@using System.Data.SqlClient;
+@using System.Data.Sql;
+@using System.Data;
+@{
+	Layout = null;
+}
+
+@if (Session["email"] == null)
+{
+	Response.Redirect("~/Home/Login");
+}
+
+@if ((Session["email"]).Equals("admin@admin.com"))
+{
+	Response.Redirect("~/Home/Admin");
+}
+
+@{
+	DataTable dt_UserEvents = CRUD.GetUserEventsList(Session["fullname"].ToString());
+}
+
+
+<style type="text/css">
+	.main {
+		max-width: 1300px;
+		margin: auto;
+	}
+
+	body {
+		background: #DAE2F8; /* fallback for old browsers */
+		background: -webkit-linear-gradient(to right, #D6A4A4, #DAE2F8); /* Chrome 10-25, Safari 5.1-6 */
+		background: linear-gradient(to right, #D6A4A4, #DAE2F8); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+	}
+
+	.form-popup {
+		display: none;
+		position: fixed;
+		bottom: 0;
+		right: 15px;
+		border: 3px solid #f1f1f1;
+		z-index: 9;
+	}
+
+	.form-container {
+		max-width: 300px;
+		padding: 10px;
+		background-color: white;
+	}
+
+	.form-container .btn {
+		background-color: #4CAF50;
+		color: white;
+		padding: 16px 20px;
+		border: none;
+		cursor: pointer;
+		width: 100%;
+		margin-bottom: 10px;
+		opacity: 0.8;
+	}
+
+	.form-container .cancel {
+		background-color: red;
+	}
+
+	.form-container .btn:hover, .open-button:hover {
+		opacity: 1;
+	}	
+
+
+	label {
+		text-align: center;
+		font-weight: bold;
+	}
+
+	input {
+		position: absolute;
+		left: 25%;
+	}
+
+	.butt {
+		float: right;
+		/* default for <button>, but useful for <a> */
+		display: inline;
+		text-align: center;
+		text-decoration: none;
+		/* create a small space when buttons wrap on 2 lines */
+		margin: 2px 0;
+		/* invisible border (will be colored on hover/focus) */
+		border: solid 1px #fff;
+		border-radius: 0px;
+		/* size comes from text & padding (no width/height) */
+		padding: 0.5em 3em;
+		/* make sure colors have enough contrast! */
+		color: white;
+		background-color: black;
+		transition: 0.6s ease;
+		cursor: pointer;
+	}
+
+	.butt1 {
+		float: left;
+		/* default for <button>, but useful for <a> */
+		display: inline;
+		text-align: center;
+		text-decoration: none;
+		/* create a small space when buttons wrap on 2 lines */
+		margin: 2px 0;
+		/* invisible border (will be colored on hover/focus) */
+		border: solid 1px #fff;
+		border-radius: 0px;
+		/* size comes from text & padding (no width/height) */
+		padding: 0.5em 3em;
+		/* make sure colors have enough contrast! */
+		color: white;
+		background-color: black;
+		transition: 0.6s ease;
+		cursor: pointer;
+		position:relative;
+		top:35px;
+	}
+
+	.butt:hover {
+		background-color: blue;
+		color: white;
+	}
+
+	.butt1:hover {
+		background-color: blue;
+		color: white;
+	}
+
+	div.hidden {
+		display: none
+	}
+
+	.myTable {
+		width: 100%;
+		text-align: left;
+		background-color: black;
+		border-collapse: collapse;
+		color: white;
+		position: absolute;
+		top: 25%;
+	}
+
+		.myTable th {
+			background-color: black;
+			color: white;
+		}
+
+		.myTable td,
+		.myTable th {
+			padding: 10px;
+			border: 1px solid #fff;
+		}
+</style>
+
+<script>
+	function func1() {
+		var x = document.getElementById("div1");
+		var y = document.getElementById("div2");
+		
+		if (y.style.display === "block")
+			y.style.display = "none";
+		
+
+		if (x.style.display === "none") {
+			x.style.display = "block";
+		} else {
+			x.style.display = "none";
+		}
+	}
+
+	function func2() {
+		var x = document.getElementById("div2");
+		var y = document.getElementById("div1");
+		
+		if (y.style.display === "block")
+			y.style.display = "none";
+	
+
+		if (x.style.display === "none") {
+			x.style.display = "block";
+		} else {
+			x.style.display = "none";
+		}
+	}
+
+
+	function test(title, date, time, duration, description, location, public, upcoming) {
+
+		//alert(title + date + time + duration + location + public + upcoming);
+		document.getElementById("f1").value = title;
+		document.getElementById("f2").value = date;
+		document.getElementById("f3").value = time;
+		document.getElementById("f4").value = duration;
+		document.getElementById("f5").value = description;
+		document.getElementById("f6").value = location;
+		if (public === 1) {
+			document.getElementById("f7").checked = true;
+		}
+		else {
+			document.getElementById("f7").checked = false;
+		}
+		
+		if (upcoming === 1) {
+			document.getElementById("f8").checked = true;
+			document.getElementById("f9").checked = false;
+		}
+		else {
+			document.getElementById("f8").checked = false;
+			document.getElementById("f9").checked = true;
+		}
+	}
+
+	function del(title, date) {
+		document.getElementById("d1").value = title;
+		document.getElementById("d2").value = date;
+	}
+	
+	
+</script>
+
+<!DOCTYPE html>
+
+<html>
+<head>
+	<meta name="viewport" content="width=device-width" />
+	<title>Profile</title>
+	
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css">
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js"></script>
+</head>
+<body>
+	<div class="main">
+		<div>
+			@if (Session["email"] == null)
+			{
+				<form action="../Home/SignUp">
+					<button class="butt" style="margin:5px; margin-top: 30px;">Sign Up</button>
+				</form>
+			}
+
+			@if (Session["email"] == null)
+			{
+				<form action="../Home/Login">
+					<button class="butt" style="margin:5px; margin-top: 30px;">Sign In</button>
+				</form>
+			}
+			else
+			{
+
+				<form action="../Home/UserLogout">
+					<button class="butt" style="margin:5px; margin-top: 30px;">Logout</button>
+				</form>
+
+				<form action="../Home/Profile">
+					<button class="butt" style="margin:5px; margin-top: 30px;">@Session["email"].ToString()</button>
+				</form>
+
+
+			}
+
+
+			
+			<form action="../Home/Index">
+				<button class="butt" style="margin:5px; margin-top: 30px;">Home</button>
+			</form>
+		</div>
+	</div>
+	@*<div id="div1" class="hidden" style="text-align: center; font-weight: bold; position:absolute; top:40%; left:45%;">
+			Email : @Session["email"].ToString()
+			<br />
+			<br />
+			Password : @Session["password"].ToString()
+			<br />
+			<br />
+			Name : @Session["fullname"].ToString()
+		</div>*@
+
+	<div style="text-align: center; font-weight: bold; position:absolute; top:20%; width:100%;">
+		<div style="position:absolute; top: 150px; width:100%">
+			<div style="font-weight:bold">Events</div>
+			<br><br />
+			<br><br />
+			@Html.Raw(EventsManagement.Models.CRUD.ConvertDataTableToHTML1(dt_UserEvents))
+		</div>
+	</div>
+
+	<div>
+
+		<div class="modal fade" id="myModal" role="dialog">
+			<div class="modal-dialog">
+
+				<div class="modal-content">
+					<div class="modal-header">
+						<button type="button" class="close" data-dismiss="modal">&times;</button>
+						<h4 class="modal-title" style="font-weight:bold; text-align:center">Edit Event</h4>
+					</div>
+					<div class="modal-body">
+
+						<form method="post" action="../Events/EditEvent" class="form-container">
+
+							<div>
+								<label for="title"><b>Title</b></label>
+								<input type="text" name="title" id="f1" readonly />
+								<br /><br />
+							</div>
+							<div>
+								<label for="date"><b>Date</b></label>
+								<input type="date" name="date" id="f2" readonly />
+								<br /><br />
+							</div>
+							<div>
+								<label for="time"><b>Time</b></label>
+								<input type="time" name="time" id="f3" />
+								<br /><br />
+							</div>
+							<div>
+								<label for="duartion"><b>Duration</b></label>
+								<input type="text" name="duration" id="f4" />
+								<br /><br />
+							</div>
+							<div>
+								<label for="description"><b>Description</b></label>
+								<input type="text" name="description" id="f5" />
+								<br /><br />
+							</div>
+							<div>
+								<label for="location"><b>Location</b></label>
+								<input type="text" name="location" id="f6" />
+								<br /><br />
+							</div>
+							<div>
+
+								<label for="isPublic"><b>Is Public</b></label>
+								<input type="checkbox" name="isPublic" id="f7" />
+								<br /><br />
+							</div>
+							<div>
+								<label for="upcoming"><b>Upcoming</b></label>
+								<input type="radio" name="upcoming" id="f8" unchecked /> <br />
+								<label for="upcoming"><b>Passed</b></label>
+								<input type="radio" name="upcoming" id="f9" unchecked /> <br />
+								<br /><br />
+							</div>
+
+							<br />
+							<button class="btn" style="position:absolute;top:80%; left:20%;padding: 0.3em 0.8em;width:30%">Update</button>
+							<button type="button" class="btn btn-default" data-dismiss="modal"
+									style="position:absolute;top:80%; left:50.5%;padding: 0.3em 0.8em;width:30%">
+								Cancel
+							</button>
+							<br /><br />
+						</form>
+
+					</div>
+				</div>
+
+			</div>
+		</div>
+
+	</div>
+
+	<div>
+
+		<div class="modal fade" id="myModal1" role="dialog">
+			<div class="modal-dialog">
+
+				<div class="modal-content">
+					<div class="modal-header">
+						<button type="button" class="close" data-dismiss="modal">&times;</button>
+						<h4 class="modal-title" style="font-weight:bold; text-align:center">Edit Event</h4>
+					</div>
+					<div class="modal-body">
+
+						<form method="post" action="../Events/DeleteEvent" class="form-container">
+
+							<div style="display:none;">
+								<label for="title"><b>Title</b></label>
+								<input type="text" name="title" id="d1" />
+								<br /><br />
+							</div>
+							<div style="display:none;">
+								<label for="date"><b>Date</b></label>
+								<input type="date" name="date" id="d2" />
+								<br /><br />
+							</div>
+
+							<div>Are you sure that you want to delete the event?</div>
+							<br />
+							<button class="btn" style="position:absolute;top:80%; left:20%;padding: 0.3em 0.8em;width:30%">Yes</button>
+							<button type="button" class="btn btn-default" data-dismiss="modal"
+									style="position:absolute;top:80%; left:50.5%;padding: 0.3em 0.8em;width:30%">
+								No
+							</button>
+							<br /><br />
+						</form>
+
+					</div>
+				</div>
+
+			</div>
+		</div>
+
+	</div>
+
+
+
+</body>
+</html>
